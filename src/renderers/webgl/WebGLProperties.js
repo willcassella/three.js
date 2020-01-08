@@ -21,6 +21,13 @@ function WebGLProperties() {
 
 	}
 
+	function set( object, map ) {
+
+		properties.set( object, map );
+
+	}
+
+
 	function remove( object ) {
 
 		properties.delete( object );
@@ -41,6 +48,7 @@ function WebGLProperties() {
 
 	return {
 		get: get,
+		set: set,
 		remove: remove,
 		update: update,
 		dispose: dispose

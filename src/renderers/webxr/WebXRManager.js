@@ -114,6 +114,12 @@ function WebXRManager( renderer, gl ) {
 
 	}
 
+	this.getReferenceSpace = function ( ) {
+
+		return referenceSpace;
+
+	};
+
 	this.setFramebufferScaleFactor = function ( /* value */ ) {
 
 		// framebufferScaleFactor = value;
@@ -299,6 +305,13 @@ function WebXRManager( renderer, gl ) {
 
 	}
 
+	this.getVrCamera = function ( ) {
+
+		updateCamera( cameraVR, null );
+		return cameraVR;
+
+	};
+
 	this.getCamera = function ( camera ) {
 
 		var parent = camera.parent;
@@ -342,31 +355,36 @@ function WebXRManager( renderer, gl ) {
 
 			var views = pose.views;
 			var baseLayer = session.renderState.baseLayer;
-
 			renderer.setFramebuffer( baseLayer.framebuffer );
 
-			for ( var i = 0; i < views.length; i ++ ) {
+			function updateCameraFromView( camera, view ) {
 
-				var view = views[ i ];
 				var viewport = baseLayer.getViewport( view );
-				var viewMatrix = view.transform.inverse.matrix;
+				var viewMatrix = view.transform.matrix;
 
-				var camera = cameraVR.cameras[ i ];
-				camera.matrix.fromArray( viewMatrix ).getInverse( camera.matrix );
+				camera.matrix.fromArray( viewMatrix );
 				camera.projectionMatrix.fromArray( view.projectionMatrix );
 				camera.viewport.set( viewport.x, viewport.y, viewport.width, viewport.height );
 
-				if ( i === 0 ) {
+			}
 
-					cameraVR.matrix.copy( camera.matrix );
+			if ( views.length === 1 ) {
 
-				}
+				updateCameraFromView( cameraVR.cameras[ 0 ], views[ 0 ] );
+				updateCameraFromView( cameraVR.cameras[ 1 ], views[ 0 ] );
 
 			}
 
-		}
+			if ( views.length === 2 ) {
 
-		//
+				updateCameraFromView( cameraVR.cameras[ 0 ], views[ 0 ] );
+				updateCameraFromView( cameraVR.cameras[ 1 ], views[ 1 ] );
+
+			}
+
+			cameraVR.matrix.copy( cameraVR.cameras[ 0 ].matrix );
+
+		}
 
 		var inputSources = session.inputSources;
 
