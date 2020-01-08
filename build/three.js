@@ -2,7 +2,7 @@
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
 	(global = global || self, factory(global.THREE = {}));
-}(this, (function (exports) { 'use strict';
+}(this, function (exports) { 'use strict';
 
 	// Polyfills
 
@@ -5321,6 +5321,14 @@
 
 		onBeforeRender: function () {},
 		onAfterRender: function () {},
+
+		updateTransforms: function ( ) {
+
+			this.matrix.decompose( this.position, this.quaternion, this.scale );
+
+			this.matrixWorldNeedsUpdate = true;
+
+		},
 
 		applyMatrix: function ( matrix ) {
 
@@ -50299,4 +50307,4 @@
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

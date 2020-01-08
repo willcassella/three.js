@@ -5316,6 +5316,14 @@ Object3D.prototype = Object.assign( Object.create( EventDispatcher.prototype ), 
 	onBeforeRender: function () {},
 	onAfterRender: function () {},
 
+	updateTransforms: function ( ) {
+
+		this.matrix.decompose( this.position, this.quaternion, this.scale );
+
+		this.matrixWorldNeedsUpdate = true;
+
+	},
+
 	applyMatrix: function ( matrix ) {
 
 		if ( this.matrixAutoUpdate ) this.updateMatrix();
